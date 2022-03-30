@@ -98,6 +98,7 @@ class SemanticSegmentation(BasePipeline):
             device='gpu',
             split='train',
             train_sum_dir='train_log',
+            steps_per_epoch=None
             **kwargs):
 
         super().__init__(model=model,
@@ -117,6 +118,7 @@ class SemanticSegmentation(BasePipeline):
                          device=device,
                          split=split,
                          train_sum_dir=train_sum_dir,
+                         steps_per_epoch=steps_per_epoch
                          **kwargs)
 
     def run_inference(self, data):
@@ -144,7 +146,8 @@ class SemanticSegmentation(BasePipeline):
                                       preprocess=model.preprocess,
                                       transform=model.transform,
                                       sampler=infer_sampler,
-                                      use_cache=False)
+                                      use_cache=False,
+                                      steps_per_epoch=self.steps_per_epoch)
         infer_loader = DataLoader(infer_split,
                                   batch_size=cfg.batch_size,
                                   sampler=get_sampler(infer_sampler),
